@@ -1,0 +1,15 @@
+# Ignore Mac System Files 
+.DS_Store
+
+# Ignore API key
+nytimes_api_key.R
+
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user
+
+*.Rproj
+
+
