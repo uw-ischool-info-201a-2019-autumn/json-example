@@ -1,5 +1,4 @@
-# Pretty JSON
-
+# filename: nytimes_ap_functions.R
 #----------------------------------------------
 # You will need a JSON viewer so that JSON markup
 # is formatted.  Here is what I use with Atom:
