@@ -36,8 +36,11 @@ t <- paste("-",make_book_list_names_query(), collapse="\n")
 
 ```{r eval=TRUE, echo=TRUE}
 book_list_name <- get_random_book_list_query()
-print(book_list_name)
 t <- get_nytimes_top_x_book_list(10,book_list_name)
 ```
 ### New York Times: Top Books in "`r book_list_query_to_title(book_list_name)`"
 `r t`
+
+### The code
+```{r, eval=FALSE, code=readLines("./nytimes_api_functions.R")}
+```
