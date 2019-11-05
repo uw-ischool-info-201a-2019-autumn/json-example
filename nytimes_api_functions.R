@@ -30,6 +30,7 @@
 # install.packages("jsonlite")
 library("httr")
 library("jsonlite")
+library("stringr")
 
 setwd("~/Documents/__INFO-201/12code/JSON/json-example")
 source("nytimes_api_key.R")
@@ -61,20 +62,45 @@ call_uri <- function(base_uri, endpoint, query_params) {
 }
 
 #----------------------------------------------
-# https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=yourkey
+# https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=XXX
 # Note: This value "api-key" is a problem for R.  Why? What is the solution?
 # Search on: "r list identifier with dash"
 # See: https://stackoverflow.com/questions/36312953/including-a-dash-in-an-argument-name-in-r
 #----------------------------------------------
-make_basic_nytimes_list_query <- function() {
+make_basic_nytimes_list_query <- function(book_list_name="hardcover-fiction") {
   query_params <- list("api-key" = NYTIMES_KEY)
   base_uri <- "https://api.nytimes.com/svc/books/v3/lists/current"
-  endpoint <- "/hardcover-fiction.json"
+  endpoint <- paste0("/",book_list_name,".json")
   response_data <- call_uri(base_uri, endpoint, query_params)
 
   # By inspection with str() we determined that books is a data frame that we can work with
-  df <- flatten(response_data$results$books)
+  df <- response_data$results$books
   return(df)
+}
+
+book_list_query_to_title <- function(query) {
+  t <- str_replace_all(query,"-"," ")
+  t <- str_to_title(t)
+  return(t)
+}
+
+make_book_list_names_query <- function() {
+  query_params <- list("api-key" = NYTIMES_KEY)
+  base_uri <- "https://api.nytimes.com/svc/books/v3/lists"
+  endpoint <- "/names"
+  response_data <- call_uri(base_uri, endpoint, query_params)
+  # The following conversion is required for making the queries
+  df <- response_data$results$list_name
+  df <- tolower(df)
+  df <- str_replace_all(df," ","-")
+  return(df)
+}
+
+get_random_book_list_query <- function() {
+  query_list <- make_book_list_names_query()
+  n <- sample(1:length(query_list),1,replace=TRUE)
+  book_list_name <- query_list[n]
+  return(book_list_name)
 }
 
 #----------------------------------------------
@@ -84,7 +110,7 @@ get_book_bib_item <- function(book_rank, book_list) {
 
   # If there is nothing in the data frame, book, return immediately
   book <- book_list[book_list$rank == book_rank, ]
-  if (nrow(book) == 0) {
+  if (is.null(book) | nrow(book) == 0) {
     return("")
   }
 
@@ -94,32 +120,18 @@ get_book_bib_item <- function(book_rank, book_list) {
   b_review_link <- book$book_review_link
   b_descr <- book$description
 
-  # Try to get the first book seller. (This is a systemic bias,
-  # which ought to be corrected.)
-  # b_seller <- ""
-  # b_seller_url <- ""
-  # if (nrow(book$buy_links) != 0) {
-  #   b_seller <- book$buy_links$name[1]
-  #   b_seller_url <- book$buy_links$url[1]
-  # }
-
   # Create a review string if necessary
   bib_title <- ""
   if (b_review_link != "") {
-    bib_title <- paste0(b_title, " by ", b_author, "(<a href='", b_review_link, "'>Review</a>)")
+    bib_title <- paste0("\n* _", b_title, "_ by ", b_author, " (<a href='", b_review_link, "'>Review</a>)", collapse="")
   }
   else {
-    bib_title <- paste0(b_title, " by ", b_author)
+    bib_title <- paste0("\n* _",b_title, "_ by ", b_author,collapse="")
   }
 
   # Add the description to the bibliograhic item
-  bib_title <- paste0(bib_title, "<br>", b_descr)
+  bib_title <- paste0(bib_title, "<br>", b_descr, "\n", collapse="")
 
-  # Add the book seller link
-#  if (b_seller_url != "") {
-#     bib_title <- bib_title
-#       paste0(bib_title, "(By at: <a href='", b_seller_url, "'>", b_seller, "</a>)")
-# }
   return(bib_title)
 }
 
@@ -128,12 +140,16 @@ get_nytimes_book_by_rank <- function(rank) {
   return (get_book_bib_item(rank, book_list))
 }
 
-get_nytimes_top_x_book_list <- function(num) {
-  book_list <- make_basic_nytimes_list_query()
+get_nytimes_top_x_book_list <- function(num, book_list_name="hardcover-fiction") {
+  print(book_list_name)
+  book_list <- make_basic_nytimes_list_query(book_list_name)
   titles <- lapply(seq(1:num), get_book_bib_item, book_list)
   return(titles)
 }
 
-
-book_list <- make_basic_nytimes_list_query()
-t <- get_book_bib_item(1, book_list)
+# query_list <- make_book_list_names_query()
+# n <- sample(1:length(query_list),1,replace=TRUE)
+# book_list_name <- query_list[n]
+# t <- get_nytimes_top_x_book_list(10,book_list_name)
+# 
+# get_nytimes_top_x_book_list(10,"indigenous-americans")

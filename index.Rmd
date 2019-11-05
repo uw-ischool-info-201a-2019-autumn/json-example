@@ -1,0 +1,43 @@
+---
+title: "Test of New York Times API Calls"
+author: "David Hendry"
+date: "11/4/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("nytimes_api_functions.R")
+```
+
+## New York Times Book Lists
+
+```{r eval=TRUE, echo=TRUE}
+book_list_name <- "indigenous-americans"
+book_list_title <- book_list_query_to_title(book_list_name)
+t <- get_nytimes_top_x_book_list(10,book_list_name)
+```
+### New York Times: Top Books in "`r book_list_title`"
+`r t`
+
+```{r eval=TRUE, echo=TRUE}
+book_list_name <- "combined-print-nonfiction"
+book_list_title <- book_list_query_to_title(book_list_name)
+t <- get_nytimes_top_x_book_list(10,book_list_name)
+```
+### New York Times: Top Books in "`r book_list_title`"
+`r t`
+
+### New York Times: List of All Book Lists 
+```{r eval=TRUE, echo=TRUE}
+t <- paste("-",make_book_list_names_query(), collapse="\n")
+```
+`r t`
+
+```{r eval=TRUE, echo=TRUE}
+book_list_name <- get_random_book_list_query()
+print(book_list_name)
+t <- get_nytimes_top_x_book_list(10,book_list_name)
+```
+### New York Times: Top Books in "`r book_list_query_to_title(book_list_name)`"
+`r t`

@@ -33,11 +33,18 @@ library("jsonlite")
 
 #----------------------------------------------
 # Make a URI
+# Note: endpoint needs a beginning forward slash (/)
+# For example: 
+# base_uri  ~~ "https://api.github.com"
+# endpoint  ~~ "/search/repositories"
 #----------------------------------------------
 make_resource_uri <- function(base_uri, endpoint) {
   return(paste0(base_uri,endpoint))
 }
 
+#----------------------------------------------
+# Get data and so some data wrangling 
+#----------------------------------------------
 call_uri <- function(base_uri, endpoint, query_params) {
   resource_uri <- make_resource_uri(base_uri,endpoint)
   response <- GET(resource_uri, query=query_params)
@@ -46,13 +53,17 @@ call_uri <- function(base_uri, endpoint, query_params) {
   return (response_data)
 }
 
-get_github_df <- function (base_uri, endpoint, query_params) {
+#----------------------------------------------
+# A search on GitHub  (see chap. 14)
+#----------------------------------------------
+get_github_df_for_dply_search <- function () {
+  query_params <- list(q = "dply", sort = "forks")
+  base_uri <-  "https://api.github.com"
+  endpoint <- "/search/repositories"
   response_data <- call_uri(base_uri, endpoint, query_params)
   df <- response_data$items
   return(df)
 }
 
-query_params <- list(q = "dply", sort = "forks")
-df <- get_github_df("https://api.github.com", 
-                    "/search/repositories", 
-                    query_params)
+df <- get_github_df_for_dply_search()
+View(df)
