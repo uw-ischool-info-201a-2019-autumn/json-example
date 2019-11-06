@@ -36,6 +36,7 @@ source("nytimes_api_key.R")
 
 #----------------------------------------------
 # Make call to a URI and process the data
+# https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html
 #----------------------------------------------
 call_uri <- function(base_uri, endpoint, query_params) {
   # Make the uri string
