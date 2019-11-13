@@ -470,25 +470,24 @@ t &lt;- get_nytimes_top_x_book_list(10,book_list_name)</code></pre>
 <pre class="r"><code>book_list_name &lt;- get_random_book_list_query()
 t &lt;- get_nytimes_top_x_book_list(10,book_list_name)</code></pre>
 </div>
-<div id="new-york-times-top-books-in-young-adult-paperback" class="section level3">
-<h3>New York Times: Top Books in “Young Adult Paperback”</h3>
+<div id="new-york-times-top-books-in-e-book-fiction" class="section level3">
+<h3>New York Times: Top Books in “E Book Fiction”</h3>
 <ul>
-<li><em>THE BOOK THIEF</em> by Markus Zusak (<a href="https://www.nytimes.com/2006/03/27/books/27masl.html">Review</a>)<br></li>
-<li><em>A MONSTER CALLS</em> by Patrick Ness<br></li>
-<li><em>THIRTEEN REASONS WHY</em> by Jay Asher<br></li>
-<li><em>THE ABSOLUTELY TRUE DIARY OF A PART-TIME INDIAN</em> by Sherman Alexie<br></li>
-<li><em>RED QUEEN</em> by Victoria Aveyard<br></li>
-<li><em>FIVE NIGHTS AT FREDDY’S: THE SILVER EYES</em> by Scott Cawthon and Kira Breed-Wrisley<br></li>
-<li><em>THE CABIN</em> by Natasha Preston<br></li>
-<li><em>BEFORE I FALL</em> by Lauren Oliver<br></li>
-<li><em>THE CELLAR</em> by Natasha Preston<br></li>
-<li><em>PASSENGER</em> by Alexandra Bracken<br></li>
+<li><em>FULL PACKAGE</em> by Lauren Blakely<br>A man shares a cramped apartment with his friend’s fetching sister.</li>
+<li><em>THE GUERNSEY LITERARY AND POTATO PEEL PIE SOCIETY</em> by Mary Ann Shaffer and Annie Barrows<br>After World War II, a journalist travels to the island of Guernsey to meet residents who resisted the Nazi occupation. Originally published in 2008.</li>
+<li><em>THE WHISTLER</em> by John Grisham (<a href="https://www.nytimes.com/2016/11/06/books/review/john-grisham-whistler.html">Review</a>)<br>A whistleblower alerts a Florida investigator to judicial corruption involving the Mob and Indian casinos.</li>
+<li><em>RING OF FIRE</em> by Brad Taylor<br>Pike Logan, a member of a secret counterterrorist unit called the Taskforce, investigates a Saudi-backed Moroccan terrorist cell.</li>
+<li><em>SMALL GREAT THINGS</em> by Jodi Picoult (<a href="https://www.nytimes.com/2016/10/16/books/review/jodi-picoult-small-great-things-roxane-gay.html">Review</a>)<br>A medical crisis entangles a black nurse, a white supremacist father and a white lawyer.</li>
+<li><em>SHELTER FOR ADELINE</em> by Susan Stoker<br>A fireman must keep his overprotective nature in check while pursuing an epileptic prey to her suspiciously obsessive boss.</li>
+<li><em>A MAN CALLED OVE</em> by Fredrik Backman<br>An angry old curmudgeon gets new neighbors, and things are about to change for all of them.</li>
+<li><em>THE MISTRESS</em> by Danielle Steel<br>The beautiful mistress of a Russian oligarch falls in love with an artist and yearns for freedom.</li>
+<li><em>THE GUESTS ON SOUTH BATTERY</em> by Karen White<br>Spirits invade the life of a Charleston realtor.</li>
+<li><em>NO MAN’S LAND</em> by David Baldacci<br>John Puller, a special agent with the Army, searches for the truth about his mother, who disappeared 30 years ago.</li>
 </ul>
 </div>
 <div id="the-code" class="section level3">
 <h3>The code</h3>
-<pre class="r"><code># Pretty JSON
-
+<pre class="r"><code># filename: nytimes_ap_functions.R
 #----------------------------------------------
 # You will need a JSON viewer so that JSON markup
 # is formatted.  Here is what I use with Atom:
@@ -526,6 +525,7 @@ source(&quot;nytimes_api_key.R&quot;)
 
 #----------------------------------------------
 # Make call to a URI and process the data
+# https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html
 #----------------------------------------------
 call_uri &lt;- function(base_uri, endpoint, query_params) {
   # Make the uri string
